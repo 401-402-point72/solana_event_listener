@@ -3787,6 +3787,7 @@ dependencies = [
 name = "solana_event_listener"
 version = "0.1.0"
 dependencies = [
+ "chrono",
  "solana-client",
  "solana-sdk",
  "tokio",
