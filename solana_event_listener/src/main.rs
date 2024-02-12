@@ -1,6 +1,9 @@
 use solana_client::rpc_client::RpcClient;
+use solana_client::rpc_config::RpcBlockConfig;
 use solana_sdk::commitment_config::CommitmentConfig;
-use solana_transaction_status::EncodedConfirmedBlock;
+use solana_transaction_status::UiConfirmedBlock;
+use solana_transaction_status::UiTransactionEncoding;
+use solana_transaction_status::TransactionDetails;
 use chrono::{LocalResult, Utc, TimeZone};
 
 const MAX_ITER : i32 = 10; //number of slots to get and try to retrieve a block from before terminating
@@ -14,7 +17,7 @@ fn _parse_rewards(){ //parses through block rewards info
 
 }
 
-fn parse_block(encoded_confirmed_block: EncodedConfirmedBlock){ //parses info in block, prints to console (will store in database eventually)
+fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in block, prints to console (will store in database eventually)
     println!("Blockhash: {}", encoded_confirmed_block.blockhash);
     println!("Previous Blockhash: {}", encoded_confirmed_block.previous_blockhash);
     println!("Parent Slot: {}", encoded_confirmed_block.parent_slot);
@@ -40,6 +43,13 @@ async fn listen_to_slots() {
     let rpc_url = "https://api.devnet.solana.com".to_string(); // Using devnet for testing, will likely swap to mainnet once tested and working.
     let rpc_client = RpcClient::new(rpc_url); //connect to rpc endpoint
     let mut iter = 0;
+    let config = RpcBlockConfig {
+        encoding: Some(UiTransactionEncoding::Base58),
+        transaction_details: Some(TransactionDetails::None),
+        rewards: Some(true),
+        commitment: Some(CommitmentConfig::finalized()),
+        max_supported_transaction_version: Some(0),
+    };
 
     loop{
         let mut retries = 0;
@@ -47,8 +57,8 @@ async fn listen_to_slots() {
         match latest_slot{
             Ok(slot) => {
                 println!("\nLatest Slot: {}", slot);
-
-                let latest_block = rpc_client.get_block(slot); //get block at latest slot
+                
+                let latest_block = rpc_client.get_block_with_config(slot, config); //get block at latest slot
                 loop{
                     match latest_block{
                         Ok(encoded_confirmed_block) =>{ //parse block info
