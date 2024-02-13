@@ -9,13 +9,69 @@ use chrono::{LocalResult, Utc, TimeZone};
 const MAX_ITER : i32 = 10; //number of slots to get and try to retrieve a block from before terminating
 const MAX_RETRIES : i32 = 5; //number of retries to retrieve block from the current slot before timing out
 
-fn _parse_transactions(){ //parses through block transaction info
+// fn _parse_transactions(){ //parses through block transaction info
 
+// }
+
+// fn _parse_rewards(){ //parses through block rewards info
+
+// }
+
+use solana_transaction_status::{EncodedTransaction, EncodedTransactionWithStatusMeta, UiTransaction, EncodedConfirmedBlock, Reward};
+use serde_json::json;
+
+
+/* fn _parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) {
+    for transaction in transactions {
+        // Extract relevant transaction information and store it in the desired format or database
+        let (signatures, message) = match &transaction.transaction {
+            EncodedTransaction::Json(ui_transaction) => {
+                if let Some(ui_transaction) = &ui_transaction.transaction {
+                    (Some(&ui_transaction.signatures), Some(&ui_transaction.message))
+                } else {
+                    (None, None)
+                }
+            }
+            _ => (None, None), // Handle other variants if needed
+        };
+
+        // Formulate transaction info JSON
+        let transaction_info = match (signatures, message) {
+            (Some(signatures), Some(message)) => json!({
+                "signatures": signatures,
+                "message": message,
+                // Add more fields as needed
+            }),
+            _ => json!({}), // Handle the case where either signatures or message is None
+        };
+
+        // Store transaction_info or process it further
+        println!("Parsed Transaction: {}", transaction_info);
+    }
+} */
+
+
+
+
+fn _parse_rewards(rewards: Vec<Reward>) {
+    for reward in rewards {
+        // Extract relevant reward information and store it in the desired format or database
+        let reward_info = json!({
+            "pubkey": reward.pubkey,
+            "lamports": reward.lamports,
+            // Add more fields as needed
+        });
+
+        // Store reward_info or process it further
+        println!("Parsed Reward: {}", reward_info);
+    }
 }
 
-fn _parse_rewards(){ //parses through block rewards info
 
-}
+
+
+
+
 
 fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in block, prints to console (will store in database eventually)
     println!("Blockhash: {}", encoded_confirmed_block.blockhash);
@@ -37,6 +93,20 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in bloc
     }
     //println!("Transactions: {:?}", encoded_confirmed_block.transactions);
     //println!("Rewards: {:?}", encoded_confirmed_block.rewards);
+
+    /*if let Some(transactions) = encoded_confirmed_block.transactions{
+        _parse_transactions(transactions);
+    }
+    else{
+        println!("No transactions in this block.");
+    }*/
+
+    if let Some(rewards) = encoded_confirmed_block.rewards{
+        _parse_rewards(rewards);
+    }
+    else{
+        println!("No rewards in this block.");
+    }
 }
 
 async fn listen_to_slots() {
