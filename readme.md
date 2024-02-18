@@ -14,13 +14,11 @@ This repo contains our solana event listener, which listens on and stores inform
     - used for asynchronous operations and timing/delays. https://docs.rs/tokio/latest/tokio/ 
 - chrono: 
     - used for date and time formatting. https://docs.rs/chrono/latest/chrono/
+- serde:
+    - used for json functionality. https://docs.rs/serde/latest/serde/
 ## DEVNET STATUS
-- DEVNET HAS BEEN DOWN SINCE FEB 9th SO OUR EVENT LISTENER ONLY RETRIEVES THE MOST RECENT BLOCK REPEATEDLY. WILL REMOVE NOTICE ONCE DEVNET IS BACK UP
 - https://explorer.solana.com/?cluster=devnet
 ## TODO
-- investigate and fix RPC response error -32015: Transaction version (0) is not supported by the requesting client. Please try the request again with the following configuration parameter: "maxSupportedTransactionVersion": 0
-- in regards to above: use get_block_with_config and set the config's max supported transaction version to be 0.
-see https://docs.rs/solana-client/latest/solana_client/rpc_client/struct.RpcClient.html#method.get_block_with_config
-- ^^^THIS IS DONE, JUST NEED TO TEST ONCE DEVNET IS BACK ONLINE
-- parse fields in retrieved blocks for desired information
-- store in database in addition to printing to console
+- Investigate why retrieved transactions always contain "none".
+- Fix deprecated from_utc and from_timestamp functions; update to non-deprecated functions
+- Store in database in addition to printing to console
