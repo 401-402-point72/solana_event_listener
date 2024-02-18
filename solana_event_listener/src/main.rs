@@ -1,21 +1,50 @@
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_sdk::commitment_config::CommitmentConfig;
+use solana_sdk::transaction;
 use solana_transaction_status::UiConfirmedBlock;
 use solana_transaction_status::UiTransactionEncoding;
 use solana_transaction_status::TransactionDetails;
 use chrono::{LocalResult, Utc, TimeZone};
+use chrono::DateTime;
 
 const MAX_ITER : i32 = 10; //number of slots to get and try to retrieve a block from before terminating
 const MAX_RETRIES : i32 = 5; //number of retries to retrieve block from the current slot before timing out
 
-fn _parse_transactions(){ //parses through block transaction info
+use solana_transaction_status::{EncodedTransaction, EncodedTransactionWithStatusMeta, UiTransaction, EncodedConfirmedBlock, Reward};
+use serde_json::json;
 
+
+fn _parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) {
+    for transaction in transactions{
+        let transaction_info = json!({
+            "transaction": transaction.transaction,
+            "meta:": transaction.meta,
+            "version": transaction.version,
+        });
+
+        println!("Parsed Transaction: {}", transaction_info);
+    }
 }
 
-fn _parse_rewards(){ //parses through block rewards info
 
+fn _parse_rewards(rewards: Vec<Reward>) {
+    for reward in rewards {
+        // Extract relevant reward information and store it in the desired format or database
+        let reward_info = json!({
+            "pubkey": reward.pubkey,
+            "lamports": reward.lamports,
+            "post balance:": reward.post_balance,
+            "reward type": reward.reward_type,
+            "commission:": reward.commission,
+            // Add more fields as needed
+        });
+
+        // Store reward_info or process it further
+        println!("Parsed Reward: {}", reward_info);
+    }
 }
+
 
 fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in block, prints to console (will store in database eventually)
     println!("Blockhash: {}", encoded_confirmed_block.blockhash);
@@ -35,8 +64,39 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in bloc
         },
         None => println!("Block Time: N/A"),
     }
-    //println!("Transactions: {:?}", encoded_confirmed_block.transactions);
-    //println!("Rewards: {:?}", encoded_confirmed_block.rewards);
+    
+    let block_time = encoded_confirmed_block.block_time.unwrap(); // Unwrapping here assuming it's safe to unwrap
+
+    // Convert Unix timestamp to DateTime<Utc>
+    let datetime_utc = DateTime::<Utc>::from_utc(chrono::NaiveDateTime::from_timestamp(block_time as i64, 0), Utc);
+    
+    // Format DateTime in RFC 2822 format
+    let block_time_rfc2822 = datetime_utc.to_rfc2822();
+
+    // jsonify block info
+    let block_info = json!({
+        "blockhash:": encoded_confirmed_block.blockhash,
+        "prev_blockhash:": encoded_confirmed_block.previous_blockhash,
+        "parent slot:": encoded_confirmed_block.parent_slot,
+        "block height:": encoded_confirmed_block.block_height,
+        "block time:": block_time_rfc2822,
+    });
+
+    println!("Parsed block: {}", block_info);
+
+    if let Some(transactions) = encoded_confirmed_block.transactions{
+        _parse_transactions(transactions);
+    }
+    else{
+        println!("No transactions in this block.");
+    }
+
+    if let Some(rewards) = encoded_confirmed_block.rewards{
+        _parse_rewards(rewards);
+    }
+    else{
+        println!("No rewards in this block.");
+    }
 }
 
 async fn listen_to_slots() {
