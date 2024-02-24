@@ -1,98 +1,85 @@
+//uncomment to turn off warnings
+#![allow(deprecated)] 
+#![allow(unused_imports)]
+
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_sdk::commitment_config::CommitmentConfig;
-use solana_sdk::transaction;
-use solana_transaction_status::UiConfirmedBlock;
-use solana_transaction_status::UiTransactionEncoding;
-use solana_transaction_status::TransactionDetails;
-use chrono::{LocalResult, Utc, TimeZone};
-use chrono::DateTime;
+use solana_transaction_status::{
+    UiTransaction, 
+    EncodedTransaction,
+    EncodedConfirmedBlock, 
+    Reward, 
+    EncodedTransactionWithStatusMeta, 
+    UiConfirmedBlock,
+    UiTransactionEncoding,
+    TransactionDetails};
+use chrono::{LocalResult, TimeZone, Utc, DateTime};
+use serde_json::json;
 
 const MAX_ITER : i32 = 10; //number of slots to get and try to retrieve a block from before terminating
 const MAX_RETRIES : i32 = 5; //number of retries to retrieve block from the current slot before timing out
 
-use solana_transaction_status::{EncodedTransaction, EncodedTransactionWithStatusMeta, UiTransaction, EncodedConfirmedBlock, Reward};
-use serde_json::json;
-
-
-fn _parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) {
+fn parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) { //parses block transaction data vector
+    println!("Total number of transactions: {}", transactions.len());
     for transaction in transactions{
+        //jsonify transaction info
         let transaction_info = json!({
             "transaction": transaction.transaction,
-            "meta:": transaction.meta,
+            "meta": transaction.meta,
             "version": transaction.version,
         });
 
+        //print, (store in database later)
         println!("Parsed Transaction: {}", transaction_info);
     }
 }
 
-
-fn _parse_rewards(rewards: Vec<Reward>) {
+fn parse_rewards(rewards: Vec<Reward>) { //parses block reward data vector
+    println!("Total number of rewards: {}", rewards.len());
     for reward in rewards {
-        // Extract relevant reward information and store it in the desired format or database
+        //jsonify reward info
         let reward_info = json!({
             "pubkey": reward.pubkey,
             "lamports": reward.lamports,
-            "post balance:": reward.post_balance,
+            "post balance": reward.post_balance,
             "reward type": reward.reward_type,
-            "commission:": reward.commission,
-            // Add more fields as needed
+            "commission": reward.commission,
         });
 
-        // Store reward_info or process it further
+        //print, (store in database later)
         println!("Parsed Reward: {}", reward_info);
     }
 }
 
-
-fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in block, prints to console (will store in database eventually)
-    println!("Blockhash: {}", encoded_confirmed_block.blockhash);
-    println!("Previous Blockhash: {}", encoded_confirmed_block.previous_blockhash);
-    println!("Parent Slot: {}", encoded_confirmed_block.parent_slot);
-    match encoded_confirmed_block.block_height {
-        Some(height) => println!("Block Height: {}", height),
-        None => println!("Block Height: N/A"),
-    }
-    match encoded_confirmed_block.block_time {
-        Some(time) => {
-            match Utc.timestamp_opt(time as i64, 0) { //convert to day-date-month-year-time format
-                LocalResult::Single(datetime) => println!("Block Time: {}", datetime.to_rfc2822()),
-                LocalResult::None => println!("Failed to parse block time"),
-                LocalResult::Ambiguous(_, _) => println!("Block Time: Ambiguous"),
-            }
-        },
-        None => println!("Block Time: N/A"),
-    }
-    
-    let block_time = encoded_confirmed_block.block_time.unwrap(); // Unwrapping here assuming it's safe to unwrap
-
-    // Convert Unix timestamp to DateTime<Utc>
-    let datetime_utc = DateTime::<Utc>::from_utc(chrono::NaiveDateTime::from_timestamp(block_time as i64, 0), Utc);
-    
-    // Format DateTime in RFC 2822 format
-    let block_time_rfc2822 = datetime_utc.to_rfc2822();
+fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in confirmed/finalized block    
+    let block_time = encoded_confirmed_block.block_time.unwrap(); // unwrap time into int (assume time exists, may need to change to match to handle errors)
+    let block_time_str = DateTime::<Utc>::from_utc(chrono::NaiveDateTime::from_timestamp(block_time as i64, 0), Utc).to_rfc2822(); // convert int time to string time using chrono
 
     // jsonify block info
     let block_info = json!({
-        "blockhash:": encoded_confirmed_block.blockhash,
-        "prev_blockhash:": encoded_confirmed_block.previous_blockhash,
-        "parent slot:": encoded_confirmed_block.parent_slot,
-        "block height:": encoded_confirmed_block.block_height,
-        "block time:": block_time_rfc2822,
+        "blockhash": encoded_confirmed_block.blockhash,
+        "prev_blockhash": encoded_confirmed_block.previous_blockhash,
+        "parent slot": encoded_confirmed_block.parent_slot,
+        "block height": encoded_confirmed_block.block_height,
+        "block time(str)": block_time_str,
+        "block time(int)": block_time
     });
-
+    //print,(store to database later)
     println!("Parsed block: {}", block_info);
 
+    //check for/get transactions
+    dbg!(&encoded_confirmed_block.transactions);
     if let Some(transactions) = encoded_confirmed_block.transactions{
-        _parse_transactions(transactions);
+        parse_transactions(transactions);
     }
     else{
         println!("No transactions in this block.");
     }
 
+    //check for/get rewards
     if let Some(rewards) = encoded_confirmed_block.rewards{
-        _parse_rewards(rewards);
+        parse_rewards(rewards);
     }
     else{
         println!("No rewards in this block.");
@@ -103,7 +90,7 @@ async fn listen_to_slots() {
     let rpc_url = "https://api.devnet.solana.com".to_string(); // Using devnet for testing, will likely swap to mainnet once tested and working.
     let rpc_client = RpcClient::new(rpc_url); //connect to rpc endpoint
     let mut iter = 0;
-    let config = RpcBlockConfig {
+    let config = RpcBlockConfig { //set up config to retrieve blocks
         encoding: Some(UiTransactionEncoding::Base58),
         transaction_details: Some(TransactionDetails::None),
         rewards: Some(true),
