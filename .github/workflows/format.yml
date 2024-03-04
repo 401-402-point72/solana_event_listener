@@ -1,10 +1,9 @@
-name: Rust
+name: Format
 
 on:
-  push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+    types:
+      - closed
 
 permissions:
   contents: write
@@ -16,31 +15,37 @@ env:
   GH_TOKEN: ${{ github.token }}
 
 jobs:
-  build:
-
+  format_and_open_pr:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build
-      run: |
-        current_dir="$(basename "$PWD")"
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        if [ -d "$current_dir" ]; then
-          cd "$current_dir"
-          cargo run
-          cd ../
-        else
-          echo "No project folder was found: $current_dir"
-        fi
-    - name: Run tests
-      run: |
-        current_dir="$(basename "$PWD")"
+      - name: Run formatter and open PR
+        run: |
+            current_dir="$(basename "$PWD")"
 
-        if [ -d "$current_dir" ]; then
-          cd "$current_dir"
-          cargo test
-          cd ../
-        else
-          echo "No project folder was found: $current_dir"
-        fi
+            git config user.email "github-actions@github.com"
+            git config user.name "github-actions"
+
+            if [ -d "$current_dir" ]; then
+                cd "$current_dir"
+                cargo fmt
+                cd ../
+
+                if [ -n "$(git status --porcelain)" ]; then
+                  git push --delete origin formatter
+                  git checkout -b formatter
+                  git add .
+                  git commit -m "Format code"
+                  git push origin formatter
+
+                  gh pr create --base main --head formatter --title "Format code" --body "This pull request contains formatted code."
+                  echo "Formatted repo and opened pr"
+                else
+                  echo "Nothing to format"
+                fi
+            else
+                echo "No project folder was found: $current_dir"
+            fi
