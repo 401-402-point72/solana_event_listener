@@ -28,7 +28,7 @@ jobs:
 
         if [ -d "$current_dir" ]; then
           cd "$current_dir"
-          cargo run
+          cargo build
           cd ../
         else
           echo "No project folder was found: $current_dir"
