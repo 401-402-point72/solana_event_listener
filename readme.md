@@ -18,7 +18,5 @@ This repo contains our solana event listener, which listens on and stores inform
     - used for json functionality. https://docs.rs/serde/latest/serde/
 ## DEVNET STATUS
 - https://explorer.solana.com/?cluster=devnet
-## TODO
-- Investigate why retrieved transactions always contain "none".
-- Fix deprecated from_utc and from_timestamp functions; update to non-deprecated functions
-- Store in database in addition to printing to console
+## MAINNET STATUS
+- https://explorer.solana.com/?cluster=mainnet-beta 

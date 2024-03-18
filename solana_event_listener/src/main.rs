@@ -87,7 +87,8 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
 }
 
 async fn listen_to_slots() {
-    let rpc_url = "https://api.devnet.solana.com".to_string(); // Using devnet for testing, will likely swap to mainnet once tested and working.
+    //let rpc_url = "https://api.devnet.solana.com".to_string(); // Using devnet for testing, will likely swap to mainnet once tested and working.
+    let rpc_url = "https://api.mainnet-beta.solana.com".to_string(); // testing mainnet
     let rpc_client = RpcClient::new(rpc_url); //connect to rpc endpoint
     let mut iter = 0;
     let config = RpcBlockConfig { //set up config to retrieve blocks
