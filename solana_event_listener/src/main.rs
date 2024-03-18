@@ -1,6 +1,7 @@
 //uncomment to turn off warnings
 #![allow(deprecated)] 
 #![allow(unused_imports)]
+#![allow(unused_variables)]
 
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
@@ -31,7 +32,7 @@ fn parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) { //p
         });
 
         //print, (store in database later)
-        println!("Parsed Transaction: {}", transaction_info);
+        //println!("Parsed Transaction: {}", transaction_info);
     }
 }
 
@@ -69,7 +70,6 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
     println!("Parsed block: {}", block_info);
 
     //check for/get transactions
-    dbg!(&encoded_confirmed_block.transactions);
     if let Some(transactions) = encoded_confirmed_block.transactions{
         parse_transactions(transactions);
     }
@@ -87,13 +87,12 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
 }
 
 async fn listen_to_slots() {
-    //let rpc_url = "https://api.devnet.solana.com".to_string(); // Using devnet for testing, will likely swap to mainnet once tested and working.
     let rpc_url = "https://api.mainnet-beta.solana.com".to_string(); // testing mainnet
     let rpc_client = RpcClient::new(rpc_url); //connect to rpc endpoint
     let mut iter = 0;
     let config = RpcBlockConfig { //set up config to retrieve blocks
         encoding: Some(UiTransactionEncoding::Base58),
-        transaction_details: Some(TransactionDetails::None),
+        transaction_details: Some(TransactionDetails::Full),
         rewards: Some(true),
         commitment: Some(CommitmentConfig::finalized()),
         max_supported_transaction_version: Some(0),
