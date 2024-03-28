@@ -2,7 +2,7 @@
 This repo contains our solana event listener, which listens on and stores information from recent slots/blocks on the solana blockchain. Written in Rust.
 # How it works - src/main.rs
 - Our event listener gets the most recently finalized slot on the solana blockchain. It takes this slot number and attempts to retrieve the block present in that slot. If a block is unable to be retrieved, it will retry until a time-out. 
-- Upon successful retrieval, the block information and it's transactions will be parsed and stored in an AWS database as well as printed to the console.
+- Upon successful retrieval the block data, it's transaction data, and it's reward data will be parsed into json objects and compiled into a json file that contains all the information in the block. This will be used to store the data in our AWS database.
 # Libraries Used - See cargo.toml for dependencies list and version numbers
 - solana-sdk: 
     - used to connect to solana rpc endpoint. https://docs.rs/solana-sdk/latest/solana_sdk/index.html

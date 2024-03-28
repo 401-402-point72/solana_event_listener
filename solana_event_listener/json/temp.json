@@ -1,0 +1,25 @@
+{
+	"BLOCK_INFO": {
+		"block_height": 237386359,
+		"block_time(int)": 1711630705,
+		"block_time(str)": "Thu, 28 Mar 2024 12:58:25 +0000",
+		"blockhash": "2D6Nu2tfmTqj5oXFt3D52SrLqJ8ZLQnWRksMCLY8NU4n",
+		"parent slot": 256962152,
+		"prev_blockhash": "EQFxbmEECy9iPgvoBXAP8nVtghWH7cWCwP1HPqG4G64S"
+	},
+	"REWARDS_INFO": {
+		"all_rewards_info": [
+			{
+				"commission": null,
+				"lamports": 15473104,
+				"post balance": 90016619610,
+				"pubkey": "6TkKqq15wXjqEjNg9zqTKADwuVATR9dW3rkNnsYme1ea",
+				"reward type": "Fee"
+			}
+		],
+		"total_rewards": 1
+	},
+	"TRANSACTIONS_INFO": {
+		"total_transactions": 671
+	}
+}
