@@ -30,7 +30,8 @@ fn parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) -> Va
     for transaction in transactions{
         let transaction_info_segment = json!({
             "transaction": transaction.transaction,
-            "meta": transaction.meta,
+            "fee": transaction.meta.clone().unwrap().fee,
+            "compute_units_consumed": transaction.meta.clone().unwrap().compute_units_consumed,
             "version": transaction.version,
         });
         transaction_info_vec.push(transaction_info_segment);
@@ -38,7 +39,7 @@ fn parse_transactions(transactions: Vec<EncodedTransactionWithStatusMeta>) -> Va
     //combine into final JSON
     let transaction_info = json!({
         "total_transactions": total_transactions,
-        //"all_transactions_info": json!(transaction_info_vec)
+        "all_transactions_info": json!(transaction_info_vec)
     });
     return transaction_info;
 }
@@ -96,13 +97,14 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
     else{
         println!("No rewards in this block.");
     }
-    //combine into full block info JSON
+
+    //combine into full block info JSON -- THIS IS WHAT WILL BE STORED IN AWS
     let full_json = json!({
         "BLOCK_INFO": block_json,
         "TRANSACTIONS_INFO": transaction_json,
         "REWARDS_INFO": rewards_json
     });
-    //write JSON data to the file
+    //write JSON data to temporary file for testing
     let file_path = "json/temp.json";
     let mut file = File::create(file_path).expect("Failed to create file");   
     serde_json::to_writer(&mut file, &full_json).expect("Failed to write JSON to file");
