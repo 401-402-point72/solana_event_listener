@@ -3,6 +3,7 @@
 #![allow(unused_imports)]
 #![allow(unused_variables)]
 
+
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_sdk::commitment_config::CommitmentConfig;
@@ -105,13 +106,13 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
         "REWARDS_INFO": rewards_json
     });
     //write JSON data to temporary file for testing
-    let file_path = "json/temp.json";
-    let mut file = File::create(file_path).expect("Failed to create file");   
-    serde_json::to_writer(&mut file, &full_json).expect("Failed to write JSON to file");
-    println!("JSON data written to {}", file_path);
+    // let file_path = "../../json/temp.json";
+    // let mut file = File::create(file_path).expect("Failed to create file");   
+    // serde_json::to_writer(&mut file, &full_json).expect("Failed to write JSON to file");
+    // println!("JSON data written to {}", file_path);
 }
 
-async fn listen_to_slots() {
+pub async fn listen_to_slots() {
     let rpc_url = "https://api.mainnet-beta.solana.com".to_string(); //mainnet
     let rpc_client = RpcClient::new(rpc_url); //connect to rpc endpoint
     let mut iter = 0;
@@ -162,7 +163,4 @@ async fn listen_to_slots() {
     }
 }
 
-#[tokio::main]
-async fn main() {
-    listen_to_slots().await;
-}
+

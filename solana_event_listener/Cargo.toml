@@ -1,15 +1,6 @@
-[package]
-name = "solana_event_listener"
-version = "0.1.0"
-edition = "2021"
+[workspace]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+members = [
+    "web_3",
 
-[dependencies]
-solana-sdk = "1.18.1"
-solana-client = "1.18.1"
-tokio = { version = "1", features = ["full"] }
-chrono = "0.4"
-solana-transaction-status = "1.18.1"
-serde_json = "1.0.113"
-
+]
