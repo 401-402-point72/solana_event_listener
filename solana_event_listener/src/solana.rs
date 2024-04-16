@@ -1,7 +1,8 @@
+mod s_3;
 //uncomment to turn off warnings
-#![allow(deprecated)] 
-#![allow(unused_imports)]
-#![allow(unused_variables)]
+// #![allow(deprecated)] 
+// #![allow(unused_imports)]
+// #![allow(unused_variables)]
 
 
 use solana_client::rpc_client::RpcClient;
@@ -20,6 +21,7 @@ use chrono::{LocalResult, TimeZone, Utc, DateTime};
 use serde_json::{json,Value};
 use std::fs::File;
 use std::io::Write;
+use std::sync::Arc;
 
 const MAX_ITER : i32 = 10; //number of slots to get and try to retrieve a block from before terminating
 const MAX_RETRIES : i32 = 3; //number of retries to retrieve block from the current slot before timing out
@@ -67,7 +69,7 @@ fn parse_rewards(rewards: Vec<Reward>) -> Value { //parses block reward data vec
     return reward_info;
 }
 
-fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in confirmed/finalized block    
+fn parse_block(encoded_confirmed_block: UiConfirmedBlock) -> Value { //parses info in confirmed/finalized block    
     let block_time = encoded_confirmed_block.block_time.unwrap(); // unwrap time into int (assume time exists, may need to change to match to handle errors)
     let block_time_str = DateTime::<Utc>::from_utc(chrono::NaiveDateTime::from_timestamp(block_time as i64, 0), Utc).to_rfc2822(); // convert int time to string time using chrono ?
     let mut transaction_json = Value::Null;
@@ -105,6 +107,11 @@ fn parse_block(encoded_confirmed_block: UiConfirmedBlock){ //parses info in conf
         "TRANSACTIONS_INFO": transaction_json,
         "REWARDS_INFO": rewards_json
     });
+
+    full_json // Return the constructed JSON object
+
+
+
     //write JSON data to temporary file for testing
     // let file_path = "../../json/temp.json";
     // let mut file = File::create(file_path).expect("Failed to create file");   
@@ -124,6 +131,13 @@ pub async fn listen_to_slots() {
         max_supported_transaction_version: Some(0),
     };
 
+    // // Add AWS stuff
+    let (bucket, client) = s_3::init_connection().await;
+
+    // Use Arc clones to stop borrowing issues
+    let bucket_arc = Arc::new(bucket.clone());
+    let client_arc = Arc::new(client.clone());
+
     loop{
         let mut retries = 0;
         let latest_slot = rpc_client.get_slot_with_commitment(CommitmentConfig::finalized()); //get latest finalized slot
@@ -136,7 +150,14 @@ pub async fn listen_to_slots() {
                         Ok(encoded_confirmed_block) =>{ //parse block info
                             println!("Block at slot {} found and information retrieved. Parsing...",slot);
                             //TODO spawn new thread for every parse_block call to handle them individually
-                            parse_block(encoded_confirmed_block);
+                            let json_obj = parse_block(encoded_confirmed_block);
+
+                            let bucket_clone = Arc::clone(&bucket_arc);
+                            let client_clone = Arc::clone(&client_arc);
+
+                            s_3::upload_object(&client_clone, &bucket_clone, &json_obj).await;
+
+            
                             break;
                         }
                         Err(ref err) =>{ //will retry block retrieval until timeout
