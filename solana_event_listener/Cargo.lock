@@ -392,7 +392,7 @@ checksum = "f1fdabc7756949593fe60f30ec81974b613357de856987752631dea1e3394c80"
 [[package]]
 name = "aws-config"
 version = "1.2.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -422,7 +422,7 @@ dependencies = [
 [[package]]
 name = "aws-credential-types"
 version = "1.2.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-async",
  "aws-smithy-runtime-api",
@@ -433,7 +433,7 @@ dependencies = [
 [[package]]
 name = "aws-runtime"
 version = "1.2.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-sigv4",
@@ -456,7 +456,7 @@ dependencies = [
 [[package]]
 name = "aws-sdk-s3"
 version = "1.23.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "ahash 0.8.11",
  "aws-credential-types",
@@ -490,7 +490,7 @@ dependencies = [
 [[package]]
 name = "aws-sdk-sso"
 version = "1.20.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -511,7 +511,7 @@ dependencies = [
 [[package]]
 name = "aws-sdk-ssooidc"
 version = "1.20.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -532,7 +532,7 @@ dependencies = [
 [[package]]
 name = "aws-sdk-sts"
 version = "1.20.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-runtime",
@@ -554,7 +554,7 @@ dependencies = [
 [[package]]
 name = "aws-sigv4"
 version = "1.2.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-smithy-eventstream",
@@ -582,7 +582,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-async"
 version = "1.2.1"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "futures-util",
  "pin-project-lite",
@@ -592,7 +592,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-checksums"
 version = "0.60.7"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-http",
  "aws-smithy-types",
@@ -612,7 +612,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-eventstream"
 version = "0.60.4"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-types",
  "bytes",
@@ -622,7 +622,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-http"
 version = "0.60.7"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-eventstream",
  "aws-smithy-runtime-api",
@@ -642,7 +642,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-json"
 version = "0.60.7"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-types",
 ]
@@ -650,7 +650,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-query"
 version = "0.60.7"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-types",
  "urlencoding",
@@ -659,7 +659,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-runtime"
 version = "1.3.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-async",
  "aws-smithy-http",
@@ -684,7 +684,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-runtime-api"
 version = "1.4.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-smithy-async",
  "aws-smithy-types",
@@ -700,7 +700,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-types"
 version = "1.1.8"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "base64-simd",
  "bytes",
@@ -725,7 +725,7 @@ dependencies = [
 [[package]]
 name = "aws-smithy-xml"
 version = "0.60.7"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "xmlparser",
 ]
@@ -733,7 +733,7 @@ dependencies = [
 [[package]]
 name = "aws-types"
 version = "1.2.0"
-source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?branch=main#4a6bb620a0175b293f980d843b937b28db8ca5f2"
+source = "git+https://github.com/ConnorSaxon/aws-sdk-rust.git?rev=9e910ce#9e910ce3230fcf5838cbef0cf31d18ca30b1a063"
 dependencies = [
  "aws-credential-types",
  "aws-smithy-async",
@@ -4457,6 +4457,7 @@ version = "0.1.0"
 dependencies = [
  "aws-config",
  "aws-sdk-s3",
+ "aws-sigv4",
  "aws-types",
  "chrono",
  "dotenv",

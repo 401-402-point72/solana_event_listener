@@ -27,6 +27,7 @@ tracing-subscriber = { version = "0.3.5", features = ["env-filter"] }
 aws-sdk-s3 = "1.23.0"
 aws-config = "1.2.0"
 aws-types = "1.2.0"
+aws-sigv4 = "1.2.0"
 
 
 
@@ -40,6 +41,8 @@ zeroize = "=1.3.0"
 # solana-program = { git = "https://github.com/ConnorSaxon/solana.git" ,package = "solana-program"}
 # solana-zk-token-sdk = { git = "https://github.com/ConnorSaxon/solana.git" ,package = "solana-zk-token-sdk"}
 
-aws-sdk-s3 =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-sdk-s3", branch = "main"}
-aws-config =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-config", branch = "main"}
-aws-types =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-types", branch = "main"}
+
+aws-sdk-s3 =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-sdk-s3", rev = "9e910ce"}
+aws-config =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-config", rev = "9e910ce"}
+aws-types =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-types", rev = "9e910ce"}
+aws-sigv4 =  { git = "https://github.com/ConnorSaxon/aws-sdk-rust.git" ,package = "aws-sigv4", rev = "9e910ce"}
