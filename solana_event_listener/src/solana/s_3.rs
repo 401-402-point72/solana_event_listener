@@ -5,6 +5,7 @@
 // #![allow(unused_imports)]
 // #![allow(unused_variables)]
 
+
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_s3::primitives::ByteStream;
 use aws_sdk_s3::{config::Region, Client};
@@ -38,22 +39,15 @@ pub async fn init_connection() -> (String, Client) {
 
 // Upload a file to a bucket.
 // #[tokio::main]
+
 pub async fn upload_object(client: &Client, bucket: &str, block: &Value, slot: &u64) -> () {
     // println!("{:#}", block);
 
     let key = slot.to_string();
+
     // Convert json object to rust native byte stream and then aws byte stream
     let rust_bytestream = serde_json::to_vec(&block).unwrap();
     let aws_bytestream = ByteStream::from(rust_bytestream);
-
-    // Grab block number as indexable key
-    // let key = match block["block_height"].as_str() {
-    //     Some(value) => value,
-    //     None => {
-    //         println!("Block number not found or is not a string");
-    //         return;
-    //     }
-    // };
 
     // Store object in bucket ... YAY!
     let _response = client

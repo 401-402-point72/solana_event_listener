@@ -5,6 +5,7 @@ mod s_3;
 // #[allow(unused_variables)]
 
 
+
 use solana_client::rpc_client::RpcClient;
 use solana_client::rpc_config::RpcBlockConfig;
 use solana_sdk::commitment_config::CommitmentConfig;
@@ -157,7 +158,6 @@ pub async fn listen_to_slots() {
 
                             s_3::upload_object(&client_clone, &bucket_clone, &json_obj, &slot).await;
 
-            
                             break;
                         }
                         Err(ref err) =>{ //will retry block retrieval until timeout
