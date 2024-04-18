@@ -1,6 +1,10 @@
 // Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 // SPDX-License-Identifier: Apache-2.0
 #![allow(clippy::result_large_err)]
+// #![allow(deprecated)] 
+// #![allow(unused_imports)]
+// #![allow(unused_variables)]
+
 
 use aws_config::meta::region::RegionProviderChain;
 use aws_sdk_s3::primitives::ByteStream;
@@ -35,30 +39,15 @@ pub async fn init_connection() -> (String, Client) {
 
 // Upload a file to a bucket.
 // #[tokio::main]
-pub async fn upload_object(client: &Client, bucket: &str, block: &Value) -> () {
-    // println!("{:#}", block);
-    // Extract block height from the JSON object
-    let block_height = match block["BLOCK_INFO"]["block_height"].as_u64() {
-        Some(value) => value.to_string(),
-        None => {
-            println!("Block height not found or is not a valid integer");
-            return (); // Return early if block height is missing or invalid
-        }
-    };
 
-    let key = block_height.clone();
+pub async fn upload_object(client: &Client, bucket: &str, block: &Value, slot: &u64) -> () {
+    // println!("{:#}", block);
+
+    let key = slot.to_string();
+
     // Convert json object to rust native byte stream and then aws byte stream
     let rust_bytestream = serde_json::to_vec(&block).unwrap();
     let aws_bytestream = ByteStream::from(rust_bytestream);
-
-    // Grab block number as indexable key
-    // let key = match block["block_height"].as_str() {
-    //     Some(value) => value,
-    //     None => {
-    //         println!("Block number not found or is not a string");
-    //         return;
-    //     }
-    // };
 
     // Store object in bucket ... YAY!
     let _response = client

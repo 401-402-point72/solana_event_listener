@@ -1,8 +1,9 @@
 mod s_3;
 //uncomment to turn off warnings
-// #![allow(deprecated)] 
-// #![allow(unused_imports)]
-// #![allow(unused_variables)]
+// #[allow(deprecated)] 
+// #[allow(unused_imports)]
+// #[allow(unused_variables)]
+
 
 
 use solana_client::rpc_client::RpcClient;
@@ -155,9 +156,8 @@ pub async fn listen_to_slots() {
                             let bucket_clone = Arc::clone(&bucket_arc);
                             let client_clone = Arc::clone(&client_arc);
 
-                            s_3::upload_object(&client_clone, &bucket_clone, &json_obj).await;
+                            s_3::upload_object(&client_clone, &bucket_clone, &json_obj, &slot).await;
 
-            
                             break;
                         }
                         Err(ref err) =>{ //will retry block retrieval until timeout

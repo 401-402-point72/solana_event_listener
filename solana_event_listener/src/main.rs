@@ -1,5 +1,9 @@
+#[allow(deprecated)] 
+#[allow(unused_imports)]
+#[allow(unused_variables)]
+
 mod solana;
-use std::io;
+// use std::io;
 
 #[tokio::main]
 async fn main() {
